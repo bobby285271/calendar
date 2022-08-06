@@ -83,12 +83,27 @@ public class Maya.GoogleBackend : GLib.Object, Maya.Backend {
                         }
 
                         auth.user = decoded_user;
+#if HAS_SOUP_3
+                        webdav.uri = GLib.Uri.build_with_user (
+                            GLib.UriFlags.NONE,
+                            "https",
+                            decoded_user,
+                            null,
+                            null,
+                            "www.google.com",
+                            -1,
+                            "/calendar/dav/%s/events".printf (decoded_user),
+                            null,
+                            null
+                        );
+#else
                         var soup_uri = new Soup.URI (null);
                         soup_uri.set_host ("www.google.com");
                         soup_uri.set_scheme ("https");
                         soup_uri.set_user (decoded_user);
                         soup_uri.set_path ("/calendar/dav/%s/events".printf (decoded_user));
                         webdav.soup_uri = soup_uri;
+#endif
                         break;
                     case "keep_copy":
                         offline.set_stay_synchronized (((Gtk.CheckButton)widget.widget).active);
@@ -128,12 +143,27 @@ public class Maya.GoogleBackend : GLib.Object, Maya.Backend {
                         }
 
                         auth.user = decoded_user;
+#if HAS_SOUP_3
+                        webdav.uri = GLib.Uri.build_with_user (
+                            GLib.UriFlags.NONE,
+                            "https",
+                            decoded_user,
+                            null,
+                            null,
+                            "www.google.com",
+                            -1,
+                            "/calendar/dav/%s/events".printf (decoded_user),
+                            null,
+                            null
+                        );
+#else
                         var soup_uri = new Soup.URI (null);
                         soup_uri.set_host ("www.google.com");
                         soup_uri.set_scheme ("https");
                         soup_uri.set_user (decoded_user);
                         soup_uri.set_path ("/calendar/dav/%s/events".printf (decoded_user));
                         webdav.soup_uri = soup_uri;
+#endif
                         break;
                     case "keep_copy":
                         offline.set_stay_synchronized (((Gtk.CheckButton)widget.widget).active);
