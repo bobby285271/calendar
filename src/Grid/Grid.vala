@@ -215,7 +215,7 @@ public class Grid : Gtk.Grid {
 
         day.in_current_month = new_date.get_month () == month_start.get_month ();
 
-        day.date = new_date;
+        day.update_date (new_date);
         return day;
     }
 

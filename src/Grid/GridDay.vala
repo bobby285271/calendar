@@ -35,6 +35,7 @@ public class Maya.View.GridDay : Gtk.EventBox {
     public bool draw_left_border = true;
     private VAutoHider event_box;
     private GLib.HashTable<string, EventButton> event_buttons;
+    Gtk.Label label;
 
     public bool in_current_month {
         set {
@@ -79,7 +80,7 @@ public class Maya.View.GridDay : Gtk.EventBox {
         style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         style_context.add_class ("cell");
 
-        var label = new Gtk.Label ("");
+        label = new Gtk.Label ("");
         label.halign = Gtk.Align.END;
         label.get_style_context ().add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         label.margin = EVENT_MARGIN;
@@ -100,10 +101,6 @@ public class Maya.View.GridDay : Gtk.EventBox {
 
         Gtk.TargetEntry dnd = {"binary/calendar", 0, 0};
         Gtk.drag_dest_set (this, Gtk.DestDefaults.MOTION, {dnd}, Gdk.DragAction.MOVE);
-
-        this.notify["date"].connect (() => {
-            label.label = date.get_day_of_month ().to_string ();
-        });
     }
 
     public override bool drag_drop (Gdk.DragContext context, int x, int y, uint time_) {
@@ -172,6 +169,11 @@ public class Maya.View.GridDay : Gtk.EventBox {
 
     public void clear_events () {
         event_buttons.remove_all ();
+    }
+
+    public void update_date (DateTime date) {
+        this.date = date;
+        label.label = date.get_day_of_month ().to_string ();
     }
 
     public void set_selected (bool selected) {
